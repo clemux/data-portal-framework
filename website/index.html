@@ -26,7 +26,9 @@
             throw new Error(message)
         }
         const data = await response.json()
-        const candidates = Object.entries(data['candidates'])
+        const candidates = Object.entries(data['candidates']).sort((a, b) => {
+            return b[1] - a[1];
+        })
         const table = document.getElementById('results')
         table.innerHTML = ''
         candidates.forEach(([candidate, percentage]) => {
