@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Presidentielles premier tour</title>
+    <link rel="stylesheet" href="static/main.css">
+</head>
+<body>
+<label for="deptInput">Departement</label>
+<input type="text" id="deptInput" value="67" class="codeInput" required pattern="[\d\d]">
+<label for="circInput">Circonscription</label>
+<input type="text" id="circInput" value="01" class="codeInput" required pattern="[\d\d]">
+<input type="button" value="Afficher" id="showButton">
+<table id="results"></table>
+</body>
+</html>
+<script>
+    async function updateTable(codeDept, codeCirc) {
+        const url = `/results?code_dept=${codeDept}&code_circ=${codeCirc}`
+        const response = await fetch(url)
+        if (!response.ok) {
+            const message = `Could not fetch data: ${response.status}`
+            throw new Error(message)
+        }
+        const data = await response.json()
+        const candidates = Object.entries(data['candidates'])
+        const table = document.getElementById('results')
+        table.innerHTML = ''
+        candidates.forEach(([candidate, percentage]) => {
+            const newRow = table.insertRow()
+            const nameCell = newRow.insertCell()
+            nameCell.appendChild(document.createTextNode(candidate))
+
+            const percentageCell = newRow.insertCell()
+            percentageCell.appendChild(document.createTextNode(percentage.toString()))
+        })
+    }
+
+    const button = document.getElementById('showButton')
+    const deptField = document.getElementById('deptInput')
+    const circField = document.getElementById('circInput')
+    button.addEventListener('click', function () {
+        updateTable(deptField.value, circField.value)
+    })
+    const inputs = document.querySelectorAll('.codeInput')
+    inputs.forEach(input => {
+        input.addEventListener('keyup', (event) => {
+            if (event.code === 'Enter') {
+                updateTable(deptField.value, circField.value)
+            }
+        })
+    })
+</script>
