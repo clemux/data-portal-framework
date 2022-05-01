@@ -4,7 +4,7 @@ from dpf.lib.db import Base
 
 
 class CircResultOrm(Base):
-    __tablename__ = 'circ_results'
+    __tablename__ = 'elections_results'
     code_dept = Column('code_dept', String, primary_key=True)
     code_circ = Column('code_circ', String, primary_key=True)
     candidate = Column('candidate', String, primary_key=True)

@@ -19,7 +19,7 @@
 </html>
 <script>
     async function updateTable(codeDept, codeCirc) {
-        const url = `/results?code_dept=${codeDept}&code_circ=${codeCirc}`
+        const url = `/elections/results?code_dept=${codeDept}&code_circ=${codeCirc}`
         const response = await fetch(url)
         if (!response.ok) {
             const message = `Could not fetch data: ${response.status}`

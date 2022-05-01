@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="covid/static/main.css">
+    <script src="covid/static/chart.min.js"></script>
+</head>
+<body>
+<canvas id="chart" width="400" height="400"></canvas>
+</body>
+</html>
+<script>
+
+    function updateChart(data) {
+        const ctx = document.getElementById('chart');
+        const footer = (tooltipItems) => {
+            const date = tooltipItems[0].label;
+            pointData = data.find(function (point, index) {
+                if (point.date === date) {
+                    return true;
+                }
+            });
+            let nbTests = pointData.rolling_tests;
+            return "Average daily tests: " + nbTests + 'k';
+        }
+        const myChart = new Chart(ctx, {
+            data: {
+                datasets: [
+                    {
+                        data: data,
+                        type: 'bar',
+                        label: 'New cases (k)',
+                        parsing: {
+                            xAxisKey: 'date',
+                            yAxisKey: 'positive_tests'
+                        },
+                        backgroundColor: [
+                            'rgba(0,155,255,0.2)'
+                        ],
+                        yAxisID: 'y1'
+                    },
+                    {
+                        data: data,
+                        type: 'line',
+                        label: 'Average new cases (k)',
+                        parsing: {
+                            xAxisKey: 'date',
+                            yAxisKey: 'rolling_average'
+                        },
+                        yAxisID: 'y1',
+                        borderColor: 'rgb(3,155,14)'
+                    },
+                    {
+                        data: data,
+                        type: 'line',
+                        label: 'Average positive rate (%)',
+                        yAxisID: 'y2',
+                        parsing: {
+                            xAxisKey: 'date',
+                            yAxisKey: 'positive_rate'
+                        },
+                        borderColor: 'rgb(0,155,255)',
+                        fill: true
+                    }
+                ]
+            },
+            options: {
+                maintainAspectRatio: false,
+                scales: {
+                    y1: {
+                        ticks: {
+                            callback: function (value, index, ticks) {
+                                return value + 'k';
+                            }
+                        }
+                    },
+                    y2: {
+                        position: 'right',
+                        min: 0,
+                        max: 50,
+                        ticks: {
+                            beginAtZero: true,
+                            callback: function (value, index, ticks) {
+                                return value + '%';
+                            }
+                        }
+                    }
+                },
+                interaction: {
+                    mode: 'index'
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        labels: {
+                            color: 'rgb(0,0,0)'
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            footer: footer,
+                        }
+                    }
+                }
+            }
+        })
+        return myChart
+    }
+
+    chart = fetch('/covid/cases?start=2022-01-01')
+        .then(response => response.json())
+        .then(data => updateChart(data))
+
+</script>
