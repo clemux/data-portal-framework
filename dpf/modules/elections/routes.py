@@ -1,8 +1,8 @@
 from typing import Union
 
-from sqlalchemy.orm import Session
-
-from . import models
+from dpf.lib.db import Session, get_db
+from fastapi import APIRouter, Query, Depends
+from . import models, schemas
 
 
 def get_circ_results(db: Session, code_dept: str, code_circ: str) -> dict[str, Union[str, float]]:
@@ -23,3 +23,16 @@ def get_circ_results(db: Session, code_dept: str, code_circ: str) -> dict[str, U
     }
 
     return circ_result_dict
+
+
+router = APIRouter(prefix='/elections', tags=['elections'])
+
+
+@router.get('/results', response_model=schemas.CircResult)
+async def get_results(
+        code_dept: str = Query(..., description="Numéro de département", example="67", min_length=2),
+        code_circ: str = Query(..., description="Numéro de circonscription", example="02", min_length=2),
+        db: Session = Depends(get_db)):
+    votes = get_circ_results(db, code_dept, code_circ)
+
+    return votes
