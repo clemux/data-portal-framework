@@ -8,7 +8,6 @@ RUN apt update && apt upgrade -y
 WORKDIR /root
 
 COPY dpf/ dpf/
-COPY website/ website/
 COPY pyproject.toml .
 COPY pdm.lock .
 

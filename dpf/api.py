@@ -5,6 +5,7 @@ from fastapi.templating import Jinja2Templates
 
 templates_elections = Jinja2Templates(directory='dpf/modules/elections/website/')
 templates_covid = Jinja2Templates(directory='dpf/modules/covid/website/')
+templates_main = Jinja2Templates(directory='website/')
 
 
 async def elections_page(request):
@@ -19,7 +20,16 @@ async def covid_page(request):
         'title': 'Covid charts',
     })
 
+async def main_page(request):
+    return templates_main.TemplateResponse('index.html', {
+        'request': request,
+    })
+
 app = FastAPI()
+app.mount('/static', StaticFiles(directory='dpf/modules/elections/website/static'), name='static')
+app.add_route('/', main_page)
+app.add_route('/index.html', main_page)
+
 
 app.mount('/elections/static', StaticFiles(directory='dpf/modules/elections/website/static'), name='static')
 app.add_route('/elections', elections_page)
