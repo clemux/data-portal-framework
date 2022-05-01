@@ -2,6 +2,7 @@ import csv
 
 from . import models
 from dpf.lib.db import Base, engine, Session
+from .models import CircResultOrm
 
 
 def register_subparsers(parser):
@@ -50,8 +51,8 @@ def parse_line(line):
 
 
 def update_db_cmd(args):
-    Base.metadata.drop_all(engine)
-    Base.metadata.create_all(engine)
+    CircResultOrm.__table__.drop(engine, checkfirst=True)
+    CircResultOrm.__table__.create(engine)
     with open(args.data_path, encoding='iso-8859-15') as f:
         f.readline()
         reader = csv.reader(f.readlines(), delimiter=';', quotechar='"')

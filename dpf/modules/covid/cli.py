@@ -15,7 +15,6 @@ def register_subparsers(parser):
 
 
 def update_db_cmd(args):
-    models.Base.metadata.create_all(bind=engine)
     start = datetime.strptime(args.start, '%Y-%m-%d')
     data = get_latest_data(start)
 
