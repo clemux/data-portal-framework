@@ -27,7 +27,7 @@ def parse_line(line):
         'ARTHAUD': comma_string_to_float(line[25]),
         'ROUSSEL': comma_string_to_float(line[32]),
         'MACRON': comma_string_to_float(line[39]),
-        'LASSALE': comma_string_to_float(line[46]),
+        'LASSALLE': comma_string_to_float(line[46]),
         'LE PEN': comma_string_to_float(line[53]),
         'ZEMMOUR': comma_string_to_float(line[60]),
         'MÉLENCHON': comma_string_to_float(line[67]),
