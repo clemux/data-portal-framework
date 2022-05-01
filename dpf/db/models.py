@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Float, String
 
-from dpf.db.database import Base
+from dpf.lib.db import Base
 
 
 class CircResultOrm(Base):

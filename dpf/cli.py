@@ -4,7 +4,9 @@ from argparse import ArgumentParser
 from dpf.db.models import CircResultOrm
 from sqlalchemy.orm import Session
 
-from dpf.db.database import engine, Base
+from dpf.lib.db import engine, Base
+
+from dpf.modules import covid
 
 DATASET_URL = 'https://www.data.gouv.fr/fr/datasets/r/29d9cba6-5a2f-455b-8f41-9040a6efc4ca'
 
@@ -61,12 +63,14 @@ def update_db_cmd(args):
 
 def main():
     parser = ArgumentParser()
-    sub_parsers = parser.add_subparsers(required=True)
+    subparsers = parser.add_subparsers(required=True)
 
-    update_db_parser = sub_parsers.add_parser('update-db')
+    update_db_parser = subparsers.add_parser('update-db')
     update_db_parser.add_argument('data_path')
     update_db_parser.set_defaults(func=update_db_cmd)
 
+    covid_parser = subparsers.add_parser('covid')
+    covid.cli.register_subparsers(covid_parser)
     args = parser.parse_args()
     args.func(args)
 
