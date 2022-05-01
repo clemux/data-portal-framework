@@ -20,3 +20,12 @@ You can retrieve elections.csv on
 ## Run API
 
 `uvicorn dpf.api:app`
+
+## Container deployment
+
+### Build
+
+`podman build -t dpf:latest -f Dockerfile .`
+
+### Run
+

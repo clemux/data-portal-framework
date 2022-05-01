@@ -10,6 +10,7 @@ WORKDIR /root
 COPY dpf/ dpf/
 COPY pyproject.toml .
 COPY pdm.lock .
+COPY website website/
 
 RUN pip install --user pdm
 RUN .local/bin/pdm install
