@@ -13,6 +13,7 @@
         <div class="col-10">
             <h1>Présidentielles 2022 - Premier tour</h1>
             <h2>Résultats par circonscription</h2>
+            <div id="alertPlaceholder"></div>
             <p><a href="https://www2.assemblee-nationale.fr/recherche-localisee/carte/FRANCE">Trouver sa
                 circonscription</a></p>
             <label for="deptInput">Departement</label>
@@ -31,10 +32,23 @@
 </body>
 </html>
 <script>
+
+    function alert(message, type) {
+        var alertPlaceholder = document.getElementById('alertPlaceholder')
+        var wrapper = document.createElement('div')
+        wrapper.innerHTML = '<div class="alert alert-' + type + ' alert-dismissible" role="alert">' + message + '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'
+
+        alertPlaceholder.append(wrapper)
+    }
+
     async function updateTable(codeDept, codeCirc) {
+        const table = document.getElementById('results')
+        table.innerHTML = ''
         const url = `/elections/results?code_dept=${codeDept}&code_circ=${codeCirc}`
-        const response = await fetch(url)
+        const response = await fetch(url).catch()
         if (!response.ok) {
+            error = await response.json()
+            alert(error['detail'], 'danger')
             const message = `Could not fetch data: ${response.status}`
             throw new Error(message)
         }
@@ -42,7 +56,6 @@
         const candidates = Object.entries(data['candidates']).sort((a, b) => {
             return b[1] - a[1];
         })
-        const table = document.getElementById('results')
         table.innerHTML = ''
         candidates.forEach(([candidate, percentage]) => {
             const newRow = table.insertRow()

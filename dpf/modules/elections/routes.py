@@ -1,17 +1,19 @@
-from typing import Union
+from typing import Union, Optional
 
 from dpf.lib.db import Session, get_db
-from fastapi import APIRouter, Query, Depends
+from fastapi import APIRouter, Query, Depends, HTTPException
 from . import models, schemas
 
 
-def get_circ_results(db: Session, code_dept: str, code_circ: str) -> dict[str, Union[str, float]]:
+def get_circ_results(db: Session, code_dept: str, code_circ: str) -> Optional[dict[str, Union[str, float]]]:
     print(code_dept, code_circ)
     circ_candidate_results = db.query(models.CircResultOrm).filter_by(
         code_circ=code_circ,
         code_dept=code_dept,
     ).all()
 
+    if len(circ_candidate_results) == 0:
+        raise HTTPException(status_code=400, detail="Département ou circonscription non trouvée")
     candidates = {}
     for result in circ_candidate_results:
         candidates[result.candidate] = result.percentage
