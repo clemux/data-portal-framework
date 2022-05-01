@@ -27,5 +27,13 @@ You can retrieve elections.csv on
 
 `podman build -t dpf:latest -f Dockerfile .`
 
-### Run
+### Build database
 
+ - `mkdir ~/dpf-data`
+ - `cp elections.csv ~/dpf-data`
+ - `podman run --rm -v ~/dpf-data:/data:z -e DPF_DATABASE_URL=sqlite:////data/dpf.db dpf:latest dpf elections update-db /data/elections.csv`
+ - `podman run --rm -v ~/dpf-data:/data:z -e DPF_DATABASE_URL=sqlite:////data/dpf.db dpf:latest dpf covid update-db`
+
+### Run server
+
+ - `podman run -p 8000:8000 --rm -v ~/dpf-data:/data -e DPF_DATABASE_URL=sqlite:////data/dpf.db   dpf:latest uvicorn --host 0.0.0.0 dpf.api:app`
