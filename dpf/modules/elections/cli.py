@@ -30,12 +30,12 @@ def parse_line(line):
         'LASSALE': comma_string_to_float(line[46]),
         'LE PEN': comma_string_to_float(line[53]),
         'ZEMMOUR': comma_string_to_float(line[60]),
-        'MELENCHON': comma_string_to_float(line[67]),
+        'MÉLENCHON': comma_string_to_float(line[67]),
         'HIDALGO': comma_string_to_float(line[74]),
         'JADOT': comma_string_to_float(line[81]),
-        'PECRESSE': comma_string_to_float(line[88]),
+        'PÉCRESSE': comma_string_to_float(line[88]),
         'POUTOU': comma_string_to_float(line[95]),
-        'DUPONT-AIGNANT': comma_string_to_float(line[102]),
+        'DUPONT-AIGNAN': comma_string_to_float(line[102]),
     }
     circ_results = []
     for name, percentage in candidates.items():
